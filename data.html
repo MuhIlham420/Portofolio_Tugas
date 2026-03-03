@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Data — M. Ilham</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg:       #0d0d0f;
+      --surface:  #16161a;
+      --card:     #1e1e24;
+      --gold:     #c9a84c;
+      --gold-lt:  #e8c97a;
+      --text:     #e8e6e0;
+      --muted:    #7a7870;
+      --border:   rgba(201,168,76,.18);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      opacity: .035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 17rem;
+      background: rgba(13,13,15,.82);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem; font-weight: 700;
+      color: var(--gold);
+      letter-spacing: .04em;
+    }
+    .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: .85rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      transition: color .25s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold-lt); }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      position: relative; z-index: 1;
+      padding: 9rem 17rem 3.5rem;
+      border-bottom: 1px solid var(--border);
+      animation: fadeUp .6s ease both;
+    }
+    .page-eyebrow {
+      font-size: .7rem; letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .8rem;
+    }
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 4vw, 3.6rem);
+      font-weight: 900;
+      line-height: 1.1;
+    }
+    .page-sub {
+      margin-top: .8rem;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .content {
+      position: relative; z-index: 1;
+      padding: 3.5rem 17rem;
+      display: flex; flex-direction: column; gap: 4rem;
+    }
+
+    /* ── SECTION BLOCK ── */
+    .block-label {
+      font-size: .7rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .8rem;
+    }
+    .block-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 1.6rem;
+    }
+
+    /* ── TABLE ── */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 1rem;
+      border: 1px solid var(--border);
+      animation: fadeUp .6s .1s ease both;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .88rem;
+    }
+    thead tr {
+      background: var(--card);
+    }
+    thead th {
+      padding: 1rem 1.4rem;
+      text-align: left;
+      font-size: .7rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    tbody tr {
+      border-bottom: 1px solid rgba(201,168,76,.07);
+      transition: background .18s;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(201,168,76,.04); }
+    tbody td {
+      padding: .95rem 1.4rem;
+      color: var(--text);
+      vertical-align: middle;
+    }
+    td.muted { color: var(--muted); }
+
+    .badge {
+      display: inline-block;
+      padding: .25rem .7rem;
+      border-radius: 2rem;
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .04em;
+    }
+    .badge-green  { background: rgba(74,222,128,.12); color: #4ade80; }
+    .badge-yellow { background: rgba(251,191,36,.12); color: #fbbf24; }
+    .badge-blue   { background: rgba(96,165,250,.12); color: #60a5fa; }
+
+    /* ── LIST SECTIONS ── */
+    .lists-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 2rem;
+      animation: fadeUp .6s .2s ease both;
+    }
+
+    .list-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.8rem;
+    }
+    .list-card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1.4rem;
+      padding-bottom: .8rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .list-card-title span { font-size: 1.2rem; }
+
+    /* ordered list */
+    .data-ol {
+      list-style: none;
+      counter-reset: item;
+      display: flex; flex-direction: column; gap: .65rem;
+    }
+    .data-ol li {
+      counter-increment: item;
+      display: flex; align-items: flex-start; gap: .8rem;
+      font-size: .88rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .data-ol li::before {
+      content: counter(item, decimal-leading-zero);
+      flex-shrink: 0;
+      font-size: .68rem;
+      font-weight: 500;
+      color: var(--gold);
+      background: rgba(201,168,76,.1);
+      border: 1px solid var(--border);
+      border-radius: .3rem;
+      padding: .15rem .4rem;
+      margin-top: .1rem;
+    }
+
+    /* unordered list */
+    .data-ul {
+      list-style: none;
+      display: flex; flex-direction: column; gap: .65rem;
+    }
+    .data-ul li {
+      display: flex; align-items: center; gap: .75rem;
+      font-size: .88rem; color: var(--text);
+    }
+    .data-ul li::before {
+      content: '▸';
+      color: var(--gold);
+      font-size: .75rem;
+      flex-shrink: 0;
+    }
+
+    /* definition list */
+    .data-dl {
+      display: flex; flex-direction: column; gap: .75rem;
+    }
+    .dl-item { }
+    .dl-item dt {
+      font-size: .68rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: .2rem;
+    }
+    .dl-item dd {
+      font-size: .9rem;
+      color: var(--text);
+      padding-left: .8rem;
+      border-left: 2px solid var(--border);
+    }
+
+    /* ── TIMELINE (bonus) ── */
+    .timeline {
+      display: flex; flex-direction: column; gap: 0;
+      animation: fadeUp .6s .3s ease both;
+    }
+    .tl-item {
+      display: grid;
+      grid-template-columns: 140px 24px 1fr;
+      gap: 0 1.2rem;
+      align-items: start;
+    }
+    .tl-year {
+      text-align: right;
+      font-size: .75rem;
+      color: var(--gold);
+      font-weight: 500;
+      padding-top: .15rem;
+      letter-spacing: .06em;
+    }
+    .tl-spine {
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .tl-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+      margin-top: .2rem;
+      box-shadow: 0 0 0 3px rgba(201,168,76,.2);
+    }
+    .tl-line {
+      flex: 1;
+      width: 1px;
+      background: var(--border);
+      min-height: 3rem;
+    }
+    .tl-item:last-child .tl-line { display: none; }
+    .tl-body { padding-bottom: 2rem; }
+    .tl-title {
+      font-weight: 500; font-size: .95rem;
+      margin-bottom: .3rem;
+    }
+    .tl-desc {
+      font-size: .83rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 2rem 17rem;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: .8rem; color: var(--muted);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* responsive */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .page-header { padding: 8rem 1.5rem 2.5rem; }
+      .content { padding: 2.5rem 1.5rem; }
+      .lists-grid { grid-template-columns: 1fr; }
+      .tl-item { grid-template-columns: 80px 20px 1fr; }
+      footer { flex-direction: column; gap: .5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">IM.</div>
+  <ul class="nav-links">
+    <li><a href="index.html">Beranda</a></li>
+    <li><a href="data.html" class="active">Data</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HEADER -->
+<header class="page-header">
+  <div class="page-eyebrow">// halaman data</div>
+  <h1 class="page-title">Data &amp; Informasi</h1>
+  <p class="page-sub">Tabel mata kuliah, daftar kegiatan, dan riwayat pendidikan — M. Ilham · NPM 2408107010043</p>
+</header>
+
+<main class="content">
+
+  <!-- TABLE -->
+  <div>
+    <div class="block-label">// tabel data</div>
+    <h2 class="block-title">Daftar Nilai Mata Kuliah</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Kode MK</th>
+            <th>Mata Kuliah</th>
+            <th>SKS</th>
+            <th>Nilai Huruf</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="muted">01</td>
+            <td>SINF1004</td>
+            <td>Struktur Data &amp; Algoritma</td>
+            <td>2</td>
+            <td>A</td>
+            <td><span class="badge badge-green">Lulus</span></td>
+          </tr>
+          <tr>
+            <td class="muted">02</td>
+            <td>SINF1002</td>
+            <td>Struktur Diskrit</td>
+            <td>2</td>
+            <td>A</td>
+            <td><span class="badge badge-green">Lulus</span></td>
+          </tr>
+          <tr>
+            <td class="muted">03</td>
+            <td>SINF1012</td>
+            <td>Basis Data I</td>
+            <td>2</td>
+            <td>A</td>
+            <td><span class="badge badge-green">Lulus</span></td>
+          </tr>
+          <tr>
+            <td class="muted">04</td>
+            <td>SINF2019</td>
+            <td>Basis Data II</td>
+            <td>2</td>
+            <td>A</td>
+            <td><span class="badge badge-green">Lulus</span></td>
+          </tr>
+          <tr>
+            <td class="muted">06</td>
+            <td>SINF1008</td>
+            <td>Jaringan Komputer</td>
+            <td>2</td>
+            <td>B</td>
+            <td><span class="badge badge-green">Lulus</span></td>
+          </tr>
+          <tr>
+            <td class="muted">07</td>
+            <td>SINF3031</td>
+            <td>Kecerdasan Artifisial</td>
+            <td>2</td>
+            <td>A</td>
+            <td><span class="badge badge-green">Lulus</span></td>
+          </tr>
+          <tr>
+            <td class="muted">05</td>
+            <td>SINF2032</td>
+            <td>Pemrograman Berbasis Web</td>
+            <td>2</td>
+            <td>—</td>
+            <td><span class="badge badge-yellow">Berlangsung</span></td>
+          </tr>
+            <td class="muted">08</td>
+            <td>SINF2030</td>
+            <td>Rekayasa Perangkat Lunak</td>
+            <td>2</td>
+            <td>—</td>
+            <td><span class="badge badge-yellow">Berlangsung</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- LISTS -->
+  <div>
+    <div class="block-label">// list data</div>
+    <h2 class="block-title">Daftar Kegiatan &amp; Informasi</h2>
+    <div class="lists-grid">
+
+      <!-- Ordered list -->
+      <div class="list-card">
+        <div class="list-card-title">Prestasi Akademik</div>
+        <ol class="data-ol">
+          <li>Penerima Beasiswa PPBRI Semester Ganjil 2025/2026</li>
+          <li>Bersambung...</li>
+        </ol>
+      </div>
+
+      <!-- Unordered list -->
+      <div class="list-card">
+        <div class="list-card-title">Kegiatan Organisasi</div>
+        <ul class="data-ul">
+          <li>Anggota Divisi PPM — HMIF USK</li>
+          <li>Sekretaris Divisi Multimedia — Seuramoe Seni FMIPA USK</li>
+          <li>Bersambung...</li>
+        </ul>
+      </div>
+
+      <!-- Definition list -->
+      <div class="list-card">
+        <div class="list-card-title">Identitas Mahasiswa</div>
+        <div class="data-dl">
+          <div class="dl-item">
+            <dt>Nama Lengkap</dt>
+            <dd>M. Ilham</dd>
+          </div>
+          <div class="dl-item">
+            <dt>NPM</dt>
+            <dd>2408107010043</dd>
+          </div>
+          <div class="dl-item">
+            <dt>Program Studi</dt>
+            <dd>Informatika</dd>
+          </div>
+          <div class="dl-item">
+            <dt>Angkatan</dt>
+            <dd>2024</dd>
+          </div>
+          <div class="dl-item">
+            <dt>Semester</dt>
+            <dd>4 (Genap 2025/2026)</dd>
+          </div>
+          <div class="dl-item">
+            <dt>IPK Sementara</dt>
+            <dd>3.72 / 4.00</dd>
+          </div>
+          <div class="dl-item">
+            <dt>Status</dt>
+            <dd>Aktif</dd>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div>
+    <div class="block-label">// riwayat pendidikan</div>
+    <h2 class="block-title">Riwayat Pendidikan</h2>
+    <div class="timeline">
+
+      <div class="tl-item">
+        <div class="tl-year">2024 — kini</div>
+        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">S1 Informatika — Universitas Syiah Kuala</div>
+          <div class="tl-desc">Fokus pada pengembangan web, kecerdasan buatan, dan rekayasa perangkat lunak. IPK 3.72.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">2022 — 2024</div>
+        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">SMA Negeri 1 Meulaboh — Jurusan MIPA</div>
+          <div class="tl-desc">Lulus dengan nilai rata-rata sangat memuaskan.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">2018 — 2022</div>
+        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">SMP Negeri 1 Meulaboh</div>
+          <div class="tl-desc">Lulus dengan predikat Sangat Memuaskan. Peraih Juara Umum angkatan 2018.</div>
+        </div>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-year">2012 — 2018</div>
+        <div class="tl-spine"><div class="tl-dot"></div><div class="tl-line"></div></div>
+        <div class="tl-body">
+          <div class="tl-title">SD Negeri 19 Meulaboh</div>
+          <div class="tl-desc">Lulus dengan predikat Memuaskan. Mulai berminat pada bidang teknologi dan ilmu pengetahuan.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 M. Ilham — NPM 2408107010043</span>
+  <a href="index.html" style="color:var(--gold); text-decoration:none; font-size:.8rem">← Kembali ke Beranda</a>
+</footer>
+
+</body>
+</html>
